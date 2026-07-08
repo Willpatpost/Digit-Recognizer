@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Draw a digit and classify it with a neural network built from scratch in NumPy.">
+  <title>Digit Recognizer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">NUMPY NEURAL NETWORK</p>
+      <h1>Digit Recognizer</h1>
+    </div>
+    <div class="model-state" id="model-state" data-state="loading">
+      <span class="state-dot" aria-hidden="true"></span>
+      <span id="model-state-text">Loading trained model...</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="workspace" aria-label="Digit recognition workspace">
+      <div class="drawing-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="step">01</p>
+            <h2>Draw one digit</h2>
+          </div>
+          <button class="secondary-button" id="clear-button" type="button">Clear</button>
+        </div>
+
+        <canvas id="drawing-canvas" width="300" height="300"
+                aria-label="Black drawing canvas" role="img"></canvas>
+
+        <div class="brush-control">
+          <label for="brush-size">Brush size <strong id="brush-value">8</strong></label>
+          <input id="brush-size" type="range" min="1" max="15" value="8">
+        </div>
+      </div>
+
+      <div class="results-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="step">02</p>
+            <h2>Run the model</h2>
+          </div>
+        </div>
+
+        <div class="prediction" aria-live="polite">
+          <p class="prediction-label">Prediction</p>
+          <div class="prediction-digit" id="prediction-digit">-</div>
+          <p class="confidence" id="confidence">Draw a digit to begin</p>
+        </div>
+
+        <button class="predict-button" id="predict-button" type="button" disabled>
+          Predict digit
+        </button>
+
+        <div class="probabilities" id="probabilities" aria-label="Class probabilities"></div>
+      </div>
+    </section>
+
+    <section class="details" aria-label="Model details">
+      <div>
+        <p class="eyebrow">HOW IT WORKS</p>
+        <h2>Inference stays in your browser.</h2>
+      </div>
+      <p>
+        Your drawing is cropped, centered, and resized to a 32 x 32 image. A
+        two-hidden-layer neural network then performs batch normalization, ReLU,
+        and softmax inference locally. No drawing data is uploaded.
+      </p>
+      <dl>
+        <div><dt>Input</dt><dd>1,024 pixels</dd></div>
+        <div><dt>Hidden layers</dt><dd>128 + 64</dd></div>
+        <div><dt>Output</dt><dd>10 classes</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    Built from scratch with NumPy, exported for JavaScript inference.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

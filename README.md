@@ -7,6 +7,13 @@ than through a machine-learning framework.
 
 ![Digit Recognizer correctly identifying a handwritten 5](data/images/Correct%205%20Prediction.png)
 
+## Live Browser Demo
+
+Try the static, client-side version on
+[GitHub Pages](https://willpatpost.github.io/Digit-Recognizer/). It uses an
+exported copy of the same trained network and performs all preprocessing and
+inference locally in the browser.
+
 ## Highlights
 
 - Fully connected neural network implemented with NumPy
@@ -20,6 +27,7 @@ than through a machine-learning framework.
 - Save and load trained model weights
 - User feedback with replay-based fine-tuning to reduce class drift
 - Background training with live progress and responsive cancellation
+- Static JavaScript inference demo deployable through GitHub Pages
 
 ## Architecture
 
@@ -109,6 +117,9 @@ The tests cover training with partial batches, model loading and continued
 training, label validation, image preprocessing, stratified splitting, and brush
 size mapping.
 
+The default model included with the browser demo achieved **96.65% accuracy** on
+its held-out, stratified validation split.
+
 ## Project Structure
 
 ```text
@@ -120,6 +131,12 @@ Digit-Recognizer/
 |   |   `-- Correct 5 Prediction.png
 |   |-- processed/
 |   `-- raw/
+|-- web/
+|   |-- models/
+|   |-- app.js
+|   |-- export_model.py
+|   |-- index.html
+|   `-- styles.css
 `-- tests/
     `-- test_model.py
 ```
