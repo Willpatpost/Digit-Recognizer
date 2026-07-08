@@ -1,43 +1,136 @@
-# Handwritten Digit Recognizer with Neural Network
+# Handwritten Digit Recognizer
 
-## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Requirements](#requirements)
+A desktop handwritten-digit recognition application built with Python, NumPy, and
+Tkinter. The neural network, training loop, optimizer, regularization, model
+persistence, and image preprocessing pipeline are implemented from scratch rather
+than through a machine-learning framework.
 
-## Overview
+![Digit Recognizer correctly identifying a handwritten 5](data/images/Correct%205%20Prediction.png)
 
-This project is a handwritten digit recognition application that uses a neural network implemented from scratch in Python. It includes a graphical user interface (GUI) built with Tkinter, allowing users to draw digits and predict their values, train custom models, or load pre-trained ones.
+## Highlights
 
-The core neural network is a fully-connected model with support for customizable hidden layers, learning rate, and regularization. The application facilitates model training, evaluation, and prediction through an intuitive interface.
+- Fully connected neural network implemented with NumPy
+- Two hidden layers with batch normalization, ReLU, and dropout
+- Softmax classification trained with cross-entropy loss and Adam
+- L2 regularization, learning-rate scheduling, and early stopping
+- Stratified train/validation splitting to preserve class representation
+- Interactive 300 x 300 drawing canvas with adjustable brush and eraser
+- Drawing preprocessing that crops, scales, and centers input for the model
+- Ranked predictions with confidence percentages
+- Save and load trained model weights
+- User feedback with replay-based fine-tuning to reduce class drift
+- Background training with live progress and responsive cancellation
 
-## Features
+## Architecture
 
-- **Custom Neural Network**: Fully-connected network with ReLU activation for hidden layers, softmax output, Adam optimizer, and L2 regularization.
-- **GUI Application**:
-  - Interactive canvas for drawing digits.
-  - User-configurable training parameters (epochs, batch size, hidden units, etc.).
-  - Options to save and load model weights.
-  - Real-time training updates displayed in the GUI.
-- **Data Handling**:
-  - Parse raw handwritten digit data for training.
-  - Support for loading CSV datasets.
-  - Randomized training/validation splits for evaluation.
-- **Model Training**: 
-  - Adjustable epochs, batch size, and learning rate.
-  - On-the-fly updates of training and validation accuracy.
-- **Prediction**: Predict handwritten digits drawn on the canvas or processed from datasets.
+```text
+32 x 32 image
+      |
+Flatten (1,024 values)
+      |
+Dense -> Batch Norm -> ReLU -> Dropout
+      |
+Dense -> Batch Norm -> ReLU -> Dropout
+      |
+Dense (10 classes) -> Softmax
+```
 
-## Requirements
+The hidden-layer sizes, learning rate, regularization strength, dropout rate,
+batch size, and epoch count can all be changed from the GUI.
 
-### Python Version
-- Python 3.8 or higher
+## Getting Started
 
-### Python Libraries
-- [Tkinter](https://docs.python.org/3/library/tkinter.html) – GUI framework, included with Python.
-- [NumPy](https://numpy.org/) – Numerical computations.
-- [Pillow](https://python-pillow.org/) – Image processing.
+### Requirements
 
-Install the required libraries using the following command:
+- Python 3.8+
+- NumPy
+- Pillow
+- Tkinter, normally included with Python on Windows and macOS
+
+Install the external dependencies:
+
 ```bash
-pip install numpy pillow
+python -m pip install numpy pillow
+```
+
+Launch the application:
+
+```bash
+python Neural.py
+```
+
+## Using the Application
+
+### Train a new model
+
+1. Click **Parse Data** if you have the raw `optdigits-orig.windep`-style file.
+2. Save the generated input and target CSV files.
+3. Click **Load Data**, then select the input CSV followed by the target CSV.
+4. Adjust the hyperparameters or keep the defaults.
+5. Click **Train Model** and watch the training and validation metrics.
+6. Save the trained model for future sessions.
+
+If CSV files have already been generated, begin with **Load Data**. The input CSV
+must contain one flattened 32 x 32 image per row (1,024 values), and the target
+CSV must contain one digit label per row.
+
+### Test a model
+
+1. Train a model or click **Load Model** to open saved weights.
+2. Draw one digit on the canvas.
+3. Click **Predict Digit** to see the prediction and top three confidence scores.
+4. Mark the result **Right** or **Wrong**. When training data is available, a
+   correction is mixed with representative original samples before fine-tuning,
+   which helps prevent the model from drifting toward a single class.
+
+## Image Pipeline
+
+The drawing canvas is intentionally larger than the model input. Before
+inference, the application:
+
+1. Converts the canvas to grayscale.
+2. Finds and crops the drawn pixels.
+3. Preserves the digit's aspect ratio.
+4. Resizes and centers it on a 32 x 32 image.
+5. Normalizes pixel values to the `[0, 1]` range.
+
+This keeps handwriting entered through the GUI aligned with the scale and format
+of the training examples.
+
+## Testing
+
+Run the unit tests from the project root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The tests cover training with partial batches, model loading and continued
+training, label validation, image preprocessing, stratified splitting, and brush
+size mapping.
+
+## Project Structure
+
+```text
+Digit-Recognizer/
+|-- Neural.py
+|-- README.md
+|-- data/
+|   |-- images/
+|   |   `-- Correct 5 Prediction.png
+|   |-- processed/
+|   `-- raw/
+`-- tests/
+    `-- test_model.py
+```
+
+## Technical Notes
+
+This project is designed as an educational implementation of the complete neural
+network workflow. It exposes the mathematics and state management that
+high-level frameworks normally handle, including forward propagation,
+backpropagation, batch-normalization statistics, Adam moments, early stopping,
+and model serialization.
+
+The application is intended for experimentation and demonstration rather than
+production handwriting recognition.
