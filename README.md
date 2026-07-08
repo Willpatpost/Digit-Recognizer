@@ -5,7 +5,7 @@ Tkinter. The neural network, training loop, optimizer, regularization, model
 persistence, and image preprocessing pipeline are implemented from scratch rather
 than through a machine-learning framework.
 
-![Digit Recognizer correctly identifying a handwritten 5](data/images/Correct%205%20Prediction.png)
+![Digit Recognizer correctly identifying a handwritten 5](data/images/Correct%208%20Prediction.png)
 
 ## Live Browser Demo
 
